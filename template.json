@@ -27,8 +27,9 @@
         ["-cpu", "host"],
         ["-m", "2048M"],
         ["-smp", "2"],
-        ["-fda", "my-seed.img"],
-        ["-serial", "mon:stdio"]
+        ["-serial", "mon:stdio"],
+        ["-net", "nic,model=virtio"],
+        ["-net", "user,hostfwd=tcp::2222-:22"]
       ]
     }
   ],
