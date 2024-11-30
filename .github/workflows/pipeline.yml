@@ -1,0 +1,43 @@
+name: Build Cloud Image Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [test, dev, prod]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up QEMU
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y qemu-utils qemu-kvm
+
+    - name: Install Packer
+      run: |
+        curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt-get update && sudo apt-get install packer
+
+    - name: Prepare cloud-init file
+      run: |
+        cp cloud-init-${{ matrix.environment }}.yml user-data
+
+    - name: Build Image for ${{ matrix.environment }}
+      run: |
+        packer build -var "environment=${{ matrix.environment }}" template.json
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.environment }}-image
+        path: output/${{ matrix.environment }}/
