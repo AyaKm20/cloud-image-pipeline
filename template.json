@@ -5,8 +5,7 @@
       "type": "qemu",
       "iso_checksum": "sha256:b8f31413336b9393ad5d8ef0282717b2ab19f007df2e9ed5196c13d8f9153c8b",
       "iso_url": "https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso", 
-      "disk_size": "5000",   
-      "disk_image": true,
+      "disk_size": "5000",
       "format": "qcow2",
       "disk_compression": true,
       "headless": true,
@@ -26,8 +25,8 @@
         "-m", "1024M",       
         "-smp", "1",         
         "-serial", "mon:stdio",
-        "-net", "nic,model=virtio",
-        "-net", "user,hostfwd=tcp::2222-:22",
+        "-netdev", "user,id=net0,hostfwd=tcp::2222-:22",
+        "-device", "virtio-net,netdev=net0",
         "-vnc", ":1"
       ]
     }
