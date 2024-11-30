@@ -54,7 +54,7 @@
     "disk_size": "10000",
     "ram": "2048",
     "env": "{{user `env`}}",
-    "iso_url": "file:///home/sosso/Downloads/focal-server-cloudimg-amd64.img",  
+    "iso_url": "file:///tmp/focal-server-cloudimg-amd64.img",  
     "ssh_password": "ubuntu",
     "ssh_username": "ubuntu"
   }
