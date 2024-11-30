@@ -26,20 +26,26 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          
+
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y qemu-kvm libvirt-daemon-system bridge-utils virt-manager  # Remplace libvirt-bin par libvirt-daemon-system
+          sudo apt install -y qemu-kvm libvirt-daemon-system bridge-utils virt-manager
 
+      # Télécharger l'ISO avant de lancer Packer
+      - name: Download Ubuntu ISO
+        run: |
+          curl -L -o /tmp/ubuntu-20.04.6-live-server-amd64.iso https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso
+
+      # Exécuter Packer pour différents environnements
       - name: Run Packer build for dev environment
         run: |
           packer build -var "env=dev" template.json
-          
+
       - name: Run Packer build for test environment
         run: |
           packer build -var "env=test" template.json
-          
+
       - name: Run Packer build for prod environment
         run: |
           packer build -var "env=prod" template.json
