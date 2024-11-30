@@ -12,12 +12,12 @@
       "ssh_username": "ubuntu",
       "ssh_password": "packer",
       "ssh_timeout": "30m",
-      "ssh_port": 22,
+      "ssh_port": 2622,
       "qemuargs": [
         ["-m", "1024M"],
         ["-cpu", "qemu64"],  
         ["-smp", "2"],
-        ["-netdev", "user,id=net0"],
+        ["-netdev", "user,id=net0,hostfwd=tcp::2622-:22"],
         ["-device", "virtio-net,netdev=net0"]
       ],
       "headless": true
@@ -29,6 +29,7 @@
       "inline": [
         "sudo apt-get update",
         "sudo apt-get install -y openssh-server",
+        "sudo sed -i 's/#Port 22/Port 22/' /etc/ssh/sshd_config",
         "sudo service ssh start",
         "sudo apt-get upgrade -y"
       ]
