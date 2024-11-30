@@ -54,19 +54,17 @@
 ,
   "provisioners": [
     {
-      "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'",
-      "inline": [
-        "sudo systemctl enable ssh",
-        "sudo systemctl start ssh",
-        "sudo apt update 2>&1 >/dev/null",
-        "sudo apt -qq -y install software-properties-common git ansible 2>&1 >/>
-        "sed -i s/ens3/enp1s0/g /etc/netplan/50-cloud-init.yaml"
-      ],
-      "type": "shell",
-      "expect_disconnect": true,
-      "valid_exit_codes": [0, 2300218]
-}
-  ],
+        "type": "shell",
+        "inline": [
+            "sudo systemctl enable ssh",
+            "sudo systemctl start ssh",
+            "sudo apt update",
+            "sudo apt -qq -y install software-properties-common git ansible",
+            "if [[ '{{user `environment`}}' == 'prod' ]]; then echo 'Running production setup'; fi"
+        ]
+    }
+]
+,
  "variables": {
     "cpu": "2",
     "disk_size": "10000",
