@@ -15,7 +15,7 @@
       "ssh_port": 22,
       "qemuargs": [
         ["-m", "1024M"],
-        ["-cpu", "qemu64"],  // Remplacer host par qemu64
+        ["-cpu", "qemu64"],  
         ["-smp", "2"],
         ["-netdev", "user,id=net0"],
         ["-device", "virtio-net,netdev=net0"]
