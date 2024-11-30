@@ -1,0 +1,45 @@
+name: Build Cloud Images with Packer
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Packer
+        uses: hashicorp/setup-packer@v2
+        with:
+          version: '1.8.4'  # Remplace par la version de Packer que tu utilises
+
+      - name: Set up SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y qemu-kvm libvirt-bin bridge-utils virt-manager
+
+      - name: Run Packer build for dev environment
+        run: |
+          packer build -var "env=dev" template.json
+          
+      - name: Run Packer build for test environment
+        run: |
+          packer build -var "env=test" template.json
+          
+      - name: Run Packer build for prod environment
+        run: |
+          packer build -var "env=prod" template.json
