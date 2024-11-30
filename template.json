@@ -28,7 +28,7 @@
         ["-serial", "mon:stdio"],
         ["-net", "nic,model=virtio"],
         ["-net", "user,hostfwd=tcp::2222-:22"],
-        ["-vnc", ":1"]   // Utilisation du port VNC :1 (5901)
+        ["-vnc", ":1"]   
       ]
     }
   ],
