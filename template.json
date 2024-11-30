@@ -22,9 +22,8 @@
       "net_device": "virtio-net",
       "qemuargs": [
         "-cpu", "qemu64",    
-        "-m", "1024M",       
+        "-m", "1024M",      
         "-smp", "1",         
-        "-serial", "mon:stdio",
         "-netdev", "user,id=net0,hostfwd=tcp::2222-:22",
         "-device", "virtio-net,netdev=net0",
         "-vnc", ":1"
