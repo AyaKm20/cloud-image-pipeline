@@ -4,7 +4,7 @@
     {
       "type": "qemu",
       "iso_checksum": "sha256:95a3363a586c113618b3b2b69b40303ca30dd20406cde35560cea0ed015c8529",
-      "iso_url": "/tmp/focal-server-cloudimg-amd64.img",
+      "iso_url": "/tmp/ubuntu-20.04.6-live-server-amd64.iso",  
       "disk_size": "10000",
       "disk_image": true,
       "format": "qcow2",
@@ -54,7 +54,7 @@
     "disk_size": "10000",
     "ram": "2048",
     "env": "{{user `env`}}",
-    "iso_url": "/tmp/focal-server-cloudimg-amd64.img",  
+    "iso_url": "/tmp/ubuntu-20.04.6-live-server-amd64.iso",  
     "ssh_password": "ubuntu",
     "ssh_username": "ubuntu"
   }
