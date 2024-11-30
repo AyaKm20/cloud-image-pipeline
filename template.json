@@ -5,7 +5,7 @@
       "type": "qemu",
       "iso_checksum": "sha256:b8f31413336b9393ad5d8ef0282717b2ab19f007df2e9ed5196c13d8f9153c8b",
       "iso_url": "https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso", 
-      "disk_size": "10000",
+      "disk_size": "5000",   
       "disk_image": true,
       "format": "qcow2",
       "disk_compression": true,
@@ -22,12 +22,13 @@
       "vm_name": "ubuntu2024.qcow2",
       "net_device": "virtio-net",
       "qemuargs": [
-        ["-cpu", "host"],
-        ["-m", "1024M"],        
-        ["-smp", "1"],          
+        ["-cpu", "qemu64"],    
+        ["-m", "1024M"],       
+        ["-smp", "1"],         
         ["-serial", "mon:stdio"],
         ["-net", "nic,model=virtio"],
-        ["-net", "user,hostfwd=tcp::2222-:22"]
+        ["-net", "user,hostfwd=tcp::2222-:22"],
+        ["-vnc", ":1"]         
       ]
     }
   ],
@@ -47,9 +48,9 @@
     }
   ],
   "variables": {
-    "cpu": "1",             
-    "disk_size": "10000",
-    "ram": "1024",          
+    "cpu": "1",              
+    "disk_size": "5000",     
+    "ram": "1024",           
     "env": "{{user `env`}}",
     "iso_url": "https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso",
     "ssh_password": "ubuntu",
