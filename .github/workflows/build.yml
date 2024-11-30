@@ -19,7 +19,7 @@ jobs:
       - name: Set up Packer
         uses: hashicorp/setup-packer@v2
         with:
-          version: '1.8.4'  # Remplacer par la version de Packer que tu utilises
+          version: '1.8.4'  # Assurez-vous que c'est la version que vous souhaitez utiliser
 
       - name: Set up SSH keys
         run: |
@@ -32,7 +32,7 @@ jobs:
           sudo apt update
           sudo apt install -y qemu-kvm libvirt-daemon-system bridge-utils virt-manager curl
 
-      # Télécharger l'ISO avant de lancer Packer
+      # Télécharger l'ISO avant de lancer Packer (vous pouvez ignorer cette étape si vous utilisez directement le fichier ISO dans le fichier Packer)
       - name: Download Ubuntu ISO
         run: |
           curl -L -o /tmp/ubuntu-20.04.6-live-server-amd64.iso https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso
@@ -40,12 +40,12 @@ jobs:
       # Exécuter Packer pour différents environnements
       - name: Run Packer build for dev environment
         run: |
-          packer build -var "env=dev" template.json
+          packer build -var "env=dev" -var "iso_url=file:///tmp/ubuntu-20.04.6-live-server-amd64.iso" template.json
 
       - name: Run Packer build for test environment
         run: |
-          packer build -var "env=test" template.json
+          packer build -var "env=test" -var "iso_url=file:///tmp/ubuntu-20.04.6-live-server-amd64.iso" template.json
 
       - name: Run Packer build for prod environment
         run: |
-          packer build -var "env=prod" template.json
+          packer build -var "env=prod" -var "iso_url=file:///tmp/ubuntu-20.04.6-live-server-amd64.iso" template.json
