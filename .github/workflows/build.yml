@@ -43,4 +43,3 @@ jobs:
       - name: Run Packer build for prod environment
         run: |
           packer build -var "env=prod" template.json
-
