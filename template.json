@@ -1,57 +1,41 @@
 {
-  "_comment": "Build with packer build ubuntu.json",
   "builders": [
     {
       "type": "qemu",
+      "iso_url": "https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso",
       "iso_checksum": "sha256:b8f31413336b9393ad5d8ef0282717b2ab19f007df2e9ed5196c13d8f9153c8b",
-      "iso_url": "https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso", 
-      "disk_size": "5000",
-      "format": "qcow2",
-      "disk_compression": true,
-      "headless": true,
+      "iso_checksum_type": "sha256",
       "output_directory": "output-ubuntu2",
-      "shutdown_command": "echo '{{user `ssh_password`}}' | sudo -S poweroff",
-      "ssh_password": "ubuntu",
-      "ssh_timeout": "10m",
-      "ssh_wait_timeout": "0s",
-      "ssh_port": "22",
+      "vm_name": "ubuntu2024",
+      "disk_size": 5000,
+      "format": "qcow2",
+      "communicator": "ssh",
       "ssh_username": "ubuntu",
-      "ssh_pty": true,
-      "ssh_handshake_attempts": "20",
-      "vm_name": "ubuntu2024.qcow2",
-      "net_device": "virtio-net",
+      "ssh_password": "packer",
+      "ssh_timeout": "30m",
+      "ssh_port": 22,
       "qemuargs": [
-        "-cpu", "qemu64",    
-        "-m", "1024M",      
-        "-smp", "1",         
-        "-netdev", "user,id=net0,hostfwd=tcp::2222-:22",
-        "-device", "virtio-net,netdev=net0",
-        "-vnc", ":1"
-      ]
+        ["-m", "1024M"],  
+        ["-cpu", "host"],
+        ["-smp", "2"],
+        ["-netdev", "user,id=net0"],
+        ["-device", "virtio-net,netdev=net0"]
+      ],
+      "network_adapters": [
+        {
+          "model": "virtio"
+        }
+      ],
+      "headless": true
     }
   ],
   "provisioners": [
     {
-      "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'",
-      "inline": [
-        "sudo systemctl enable ssh",
-        "sudo systemctl start ssh",
-        "sudo apt update 2>&1 >/dev/null",
-        "sudo apt -qq -y install software-properties-common git ansible 2>&1 >/dev/null",
-        "sed -i s/ens3/enp1s0/g /etc/netplan/50-cloud-init.yaml"
-      ],
       "type": "shell",
-      "expect_disconnect": true,
-      "valid_exit_codes": [0, 2300218]
+      "inline": [
+        "sudo apt-get update",
+        "sudo apt-get upgrade -y"
+      ]
     }
-  ],
-  "variables": {
-    "cpu": "1",              
-    "disk_size": "5000",     
-    "ram": "1024",           
-    "env": "{{user `env`}}",
-    "iso_url": "https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso",
-    "ssh_password": "ubuntu",
-    "ssh_username": "ubuntu"
-  }
+  ]
 }
