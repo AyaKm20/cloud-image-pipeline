@@ -40,12 +40,12 @@ jobs:
       # Exécuter Packer pour différents environnements
       - name: Run Packer build for dev environment
         run: |
-          packer build -var "env=dev" -var "iso_url=file:///tmp/ubuntu-20.04.6-live-server-amd64.iso" template.json
+          packer build -var "env=dev" -var "iso_url=https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso" template.json
 
       - name: Run Packer build for test environment
         run: |
-          packer build -var "env=test" -var "iso_url=file:///tmp/ubuntu-20.04.6-live-server-amd64.iso" template.json
+          packer build -var "env=test" -var "iso_url=https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso" template.json
 
       - name: Run Packer build for prod environment
         run: |
-          packer build -var "env=prod" -var "iso_url=file:///tmp/ubuntu-20.04.6-live-server-amd64.iso" template.json
+          packer build -var "env=prod" -var "iso_url=https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso" template.json
