@@ -3,7 +3,7 @@
   "builders": [
     {
       "type": "qemu",
-      "iso_checksum": "sha256:95a3363a586c113618b3b2b69b40303ca30dd20406cde35560cea0ed015c8529",
+      "iso_checksum": "sha256:a570579b5dda4fc0b46a29d654d672bb48faa68699f85e530bb04514727a1c2c",
       "iso_url": "https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img",
       "disk_size": "10000",
       "disk_image": true,
@@ -76,7 +76,7 @@
     "ram": "2048",
     "domain": "local",
     "hostname": "ubuntu",
-    "iso_checksum": "95a3363a586c113618b3b2b69b40303ca30dd20406cde35560cea0ed015c8529",
+    "iso_checksum": "a570579b5dda4fc0b46a29d654d672bb48faa68699f85e530bb04514727a1c2c",
     "iso_url": "https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img",
     "name": "ubuntu",
     "version": "2024",
