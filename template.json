@@ -3,7 +3,7 @@
   "builders": [
     {
       "type": "qemu",
-      "iso_checksum": "sha256:95a3363a586c113618b3b2b69b40303ca30dd20406cde",
+      "iso_checksum": "sha256:95a3363a586c113618b3b2b69b40303ca30dd20406cde35560cea0ed015c8529",
       "iso_url": "https://cloud-images.ubuntu.com/releases/focal/20201124/focal-server-cloudimg-amd64.img",
       "disk_size": "{{user `disk_size`}}",
       "disk_image": true,
