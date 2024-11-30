@@ -1,55 +1,48 @@
-name: Build Cloud Images with Packer
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Packer
-        uses: hashicorp/setup-packer@v2
-        with:
-          version: '1.8.4'
-
-      - name: Set up SSH keys
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y qemu-kvm libvirt-daemon-system bridge-utils virt-manager curl
-
-      - name: Download Ubuntu ISO
-        run: |
-          curl -L -o /tmp/ubuntu-20.04.6-live-server-amd64.iso https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso
-
-      - name: Run Packer build for dev environment
-        env:
-          PACKER_LOG: 1
-        run: |
-          packer build -var "env=dev" -var "iso_url=/tmp/ubuntu-20.04.6-live-server-amd64.iso" template.json
-
-      - name: Run Packer build for test environment
-        env:
-          PACKER_LOG: 1
-        run: |
-          packer build -var "env=test" -var "iso_url=/tmp/ubuntu-20.04.6-live-server-amd64.iso" template.json
-
-      - name: Run Packer build for prod environment
-        env:
-          PACKER_LOG: 1
-        run: |
-          packer build -var "env=prod" -var "iso_url=/tmp/ubuntu-20.04.6-live-server-amd64.iso" template.json
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "iso_url": "https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso",
+      "iso_checksum": "sha256:b8f31413336b9393ad5d8ef0282717b2ab19f007df2e9ed5196c13d8f9153c8b",
+      "output_directory": "output-ubuntu2",
+      "vm_name": "ubuntu2024",
+      "disk_size": 5000,
+      "format": "qcow2",
+      "communicator": "ssh",
+      "ssh_username": "ubuntu",
+      "ssh_password": "packer",
+      "ssh_timeout": "30m",
+      "ssh_port": 2622,
+      "qemuargs": [
+        ["-m", "1024M"],
+        ["-cpu", "qemu64"],
+        ["-smp", "2"],
+        ["-netdev", "user,id=net0,hostfwd=tcp::2622-:22"],
+        ["-device", "virtio-net,netdev=net0"]
+      ],
+      "headless": true,
+      "boot_command": [
+        "<esc><wait>",
+        "auto console=ttyS0 ",
+        "priority=critical ",
+        "locale=en_US ",
+        "keyboard-configuration/layoutcode=us ",
+        "<enter><wait>"
+      ],
+      "boot_wait": "5s"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo apt-get update",
+        "sudo apt-get install -y openssh-server",
+        "sudo sed -i 's/#Port 22/Port 22/' /etc/ssh/sshd_config",
+        "sudo systemctl enable ssh",
+        "sudo systemctl start ssh",
+        "sudo apt-get upgrade -y"
+      ]
+    }
+  ]
+}
