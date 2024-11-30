@@ -37,15 +37,21 @@ jobs:
         run: |
           curl -L -o /tmp/ubuntu-20.04.6-live-server-amd64.iso https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso
 
-      # Exécuter Packer pour différents environnements
+      # Exécuter Packer pour différents environnements avec débogage activé
       - name: Run Packer build for dev environment
+        env:
+          PACKER_LOG: 1  # Enable Packer debug logging
         run: |
           packer build -var "env=dev" -var "iso_url=https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso" template.json
 
       - name: Run Packer build for test environment
+        env:
+          PACKER_LOG: 1  # Enable Packer debug logging
         run: |
           packer build -var "env=test" -var "iso_url=https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso" template.json
 
       - name: Run Packer build for prod environment
+        env:
+          PACKER_LOG: 1  # Enable Packer debug logging
         run: |
           packer build -var "env=prod" -var "iso_url=https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso" template.json
