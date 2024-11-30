@@ -22,13 +22,13 @@
       "vm_name": "ubuntu2024.qcow2",
       "net_device": "virtio-net",
       "qemuargs": [
-        ["-cpu", "qemu64"],    
-        ["-m", "1024M"],       
-        ["-smp", "1"],         
-        ["-serial", "mon:stdio"],
-        ["-net", "nic,model=virtio"],
-        ["-net", "user,hostfwd=tcp::2222-:22"],
-        ["-vnc", ":1"]   
+        "-cpu", "qemu64",    
+        "-m", "1024M",       
+        "-smp", "1",         
+        "-serial", "mon:stdio",
+        "-net", "nic,model=virtio",
+        "-net", "user,hostfwd=tcp::2222-:22",
+        "-vnc", ":1"
       ]
     }
   ],
