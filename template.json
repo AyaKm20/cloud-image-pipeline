@@ -1,5 +1,5 @@
 {
-  "_comment": "Build with `packer build ubuntu.json`",
+  "_comment": "Build with packer build ubuntu.json",
   "builders": [
     {
       "type": "qemu",
@@ -10,8 +10,8 @@
       "format": "qcow2",
       "disk_compression": true,
       "headless": true,
-      "output_directory": "output-{{user `environment`}}",
-      "shutdown_command": "echo '{{user `ssh_password`}}' | sudo -S bash -c 'shutdown -P now'",
+      "output_directory": "output-ubuntu2",
+      "shutdown_command": "echo '{{user ssh_password}}' | sudo -S bash -c 'poweroff'",
       "ssh_password": "ubuntu",
       "ssh_timeout": "10m",
       "ssh_wait_timeout": "0s",
@@ -19,44 +19,43 @@
       "ssh_username": "ubuntu",
       "ssh_pty": true,
       "ssh_handshake_attempts": "20",
-      "vm_name": "{{user `environment`}}-vm.qcow2",
+      "vm_name": "ubuntu2024.qcow2",
       "accelerator": "kvm",
       "net_device": "virtio-net",
       "use_default_display": true,
       "qemuargs": [
-        ["-fda", "cloud-init-{{user `environment`}}.yml"],
         ["-display", "gtk"],
         ["-machine", "accel=kvm"],
         ["-cpu", "host"],
         ["-m", "2048M"],
-        ["-smp", "2"]
+        ["-smp", "2"],
+        ["-fda", "my-seed.img"],
+        ["-serial", "mon:stdio"]
       ]
     }
   ],
   "provisioners": [
     {
-      "type": "shell",
+      "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'",
       "inline": [
         "sudo systemctl enable ssh",
         "sudo systemctl start ssh",
-        "sudo apt update",
-        "sudo apt -qq -y install software-properties-common git ansible",
-        "if [[ '{{user `environment`}}' == 'prod' ]]; then echo 'Running production setup'; fi"
-      ]
+        "sudo apt update 2>&1 >/dev/null",
+        "sudo apt -qq -y install software-properties-common git ansible 2>&1 >/dev/null",
+        "sed -i s/ens3/enp1s0/g /etc/netplan/50-cloud-init.yaml"
+      ],
+      "type": "shell",
+      "expect_disconnect": true,
+      "valid_exit_codes": [0, 2300218]
     }
   ],
   "variables": {
     "cpu": "2",
     "disk_size": "10000",
     "ram": "2048",
-    "domain": "local",
-    "hostname": "ubuntu",
-    "iso_checksum": "420699f9c9a71f2f840b91d43bb98fccdc7d728558cac8d8d297f29e93d",
+    "env": "{{user `env`}}",  // Variable d'environnement dynamique
     "iso_url": "file:///home/sosso/Downloads/focal-server-cloudimg-amd64.img",
-    "name": "ubuntu",
-    "version": "2024",
     "ssh_password": "ubuntu",
-    "ssh_username": "ubuntu",
-    "environment": "test"
+    "ssh_username": "ubuntu"
   }
 }
