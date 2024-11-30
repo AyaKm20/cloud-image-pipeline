@@ -20,13 +20,11 @@
       "ssh_pty": true,
       "ssh_handshake_attempts": "20",
       "vm_name": "ubuntu2024.qcow2",
-      "accelerator": "kvm",
       "net_device": "virtio-net",
       "qemuargs": [
-        ["-machine", "accel=kvm"],
         ["-cpu", "host"],
-        ["-m", "2048M"],
-        ["-smp", "2"],
+        ["-m", "1024M"],        
+        ["-smp", "1"],          
         ["-serial", "mon:stdio"],
         ["-net", "nic,model=virtio"],
         ["-net", "user,hostfwd=tcp::2222-:22"]
@@ -49,9 +47,9 @@
     }
   ],
   "variables": {
-    "cpu": "2",
+    "cpu": "1",             
     "disk_size": "10000",
-    "ram": "2048",
+    "ram": "1024",          
     "env": "{{user `env`}}",
     "iso_url": "https://releases.ubuntu.com/20.04/ubuntu-20.04.6-live-server-amd64.iso",
     "ssh_password": "ubuntu",
