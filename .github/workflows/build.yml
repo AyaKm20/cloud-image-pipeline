@@ -19,7 +19,7 @@ jobs:
       - name: Set up Packer
         uses: hashicorp/setup-packer@v2
         with:
-          version: '1.8.4'  # Remplace par la version de Packer que tu utilises
+          version: '1.8.4'  # Remplacer par la version de Packer que tu utilises
 
       - name: Set up SSH keys
         run: |
@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y qemu-kvm libvirt-daemon-system bridge-utils virt-manager
+          sudo apt install -y qemu-kvm libvirt-daemon-system bridge-utils virt-manager curl
 
       # Télécharger l'ISO avant de lancer Packer
       - name: Download Ubuntu ISO
