@@ -20,12 +20,12 @@
       "ssh_pty": true,
       "ssh_handshake_attempts": "20",
       "vm_name": "ubuntu2024.qcow2",
-      "accelerator": "kvm",
+      "accelerator": "tcg",  // Remplacer kvm par tcg
       "net_device": "virtio-net",
       "use_default_display": true,
       "qemuargs": [
-        ["-display", "gtk"],
-        ["-machine", "accel=kvm"],
+        // Retirer l'argument -display gtk
+        ["-machine", "accel=tcg"],  // Utiliser l'accélération TCG
         ["-cpu", "host"],
         ["-m", "2048M"],
         ["-smp", "2"],
