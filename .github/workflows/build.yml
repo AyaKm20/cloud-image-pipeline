@@ -13,38 +13,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Récupération du code source
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Configuration de Packer
       - name: Set up Packer
         uses: hashicorp/setup-packer@v2
         with:
-          version: '1.8.4'  # Remplace par la version exacte de Packer que tu utilises
+          version: '1.8.4'  # Remplacez par la version correcte de Packer si différente
 
-      # Configuration des clés SSH (si nécessaire)
       - name: Set up SSH keys
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
-      # Installation des dépendances nécessaires
+          
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager
+          sudo apt install -y qemu-kvm libvirt-daemon-system bridge-utils virt-manager
 
-      # Exécution des builds Packer pour différents environnements
       - name: Run Packer build for dev environment
         run: |
-          packer build -var "env=dev" template.json
-
+          packer build -var "env=dev" -var "ssh_password=packer" template.json
+          
       - name: Run Packer build for test environment
         run: |
-          packer build -var "env=test" template.json
-
+          packer build -var "env=test" -var "ssh_password=packer" template.json
+          
       - name: Run Packer build for prod environment
         run: |
-          packer build -var "env=prod" template.json
+          packer build -var "env=prod" -var "ssh_password=packer" template.json
