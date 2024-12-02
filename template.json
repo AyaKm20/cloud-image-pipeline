@@ -25,10 +25,6 @@
       "use_default_display": true,
       "qemuargs": [
         [
-          "-display",
-          "gtk"
-        ],
-        [
           "-machine",
           "accel=kvm"
         ],
