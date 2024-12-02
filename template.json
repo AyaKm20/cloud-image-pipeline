@@ -1,5 +1,5 @@
 {
-  "_comment": "Build with `packer build ubuntu.json`",
+  "_comment": "Build with packer build ubuntu.json",
   "builders": [
     {
       "type": "qemu",
@@ -11,7 +11,7 @@
       "disk_compression": true,
       "headless": true,
       "output_directory": "output-ubuntu2",
-      "shutdown_command": "echo '{{user `ssh_password`}}' | sudo -S bash -c 'shutdown -h now'",
+      "shutdown_command": "echo '{{user ssh_password}}' | sudo -S bash -c 'shutdown -h now'",
       "ssh_password": "ubuntu",
       "ssh_timeout": "10m",
       "ssh_wait_timeout": "0s",
@@ -24,6 +24,10 @@
       "net_device": "virtio-net",
       "use_default_display": true,
       "qemuargs": [
+        [
+          "-display",
+          "gtk"
+        ],
         [
           "-machine",
           "accel=kvm"
