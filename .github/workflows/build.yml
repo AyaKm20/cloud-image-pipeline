@@ -34,6 +34,7 @@ jobs:
 
       - name: Run Packer build for dev environment
         run: |
+          packer plugins install github.com/hashicorp/qemu
           packer build -var "env=dev" -var "ssh_password=packer" template.json
           
       - name: Run Packer build for test environment
